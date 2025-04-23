@@ -1,10 +1,10 @@
 package model;
 import java.util.ArrayList;
-public abstract class Utente {
+public class Utente {
     private  String login;
     private String password;
     private ArrayList<ToDo> ToDo = new ArrayList<>();
-
+    private ArrayList<Bacheca> Bacheche = new ArrayList<>();
 
     public Utente(String login, String password) {
         this.login = login;
@@ -24,21 +24,25 @@ public abstract class Utente {
         this.login = login;
     }
 
+    public ArrayList<Bacheca> getBacheche() {
+        return Bacheche;
+    }
+
     //prototipi
-    public abstract boolean login();
-    public abstract void logout();
-    public abstract void aggiungiBacheca();
-    public abstract void modificaBacheca();
-    public abstract void eliminaBacheca();
-    public abstract void modificaOrdine();
-    public abstract void creaTodo();
-    public abstract void modificaTodo();
-    public abstract void eliminaTodo();
-    public abstract void spostaTodo();
-    public abstract void cambiaBacheca();
-    public abstract void condividiTodo();
-    public abstract void revocaCondivisione();
-    public abstract void ricercaTodo();
-    public abstract void todoInScadenza();
+    public boolean login(){ return true;};
+    public void logout() {};
+    public void aggiungiBacheca() {};
+    public void modificaBacheca() {};
+    public void eliminaBacheca() {};
+    public void modificaOrdine() {};
+    public void creaTodo() {};
+    public void modificaTodo() {};
+    public void eliminaTodo() {};
+    public void spostaTodo() {};
+    public void cambiaBacheca() {};
+    public void condividiTodo() {};
+    public void revocaCondivisione() {};
+    public void ricercaTodo() {};
+    public void todoInScadenza() {};
 
 }
