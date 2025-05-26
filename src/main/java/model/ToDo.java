@@ -1,88 +1,107 @@
 package model;
+
+import java.awt.Image; // Per l'attributo immagine come da UML
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Objects;
+
 public class ToDo {
-    private ArrayList<Utente> Utenti = new ArrayList<>();
-    private String Titolo;
-    private String Url;
-    private String Descrizione;
-    private LocalDate Scadenza;
-    private String Immagine;
-    private int Posizione;
-    private StatoToDo Stato;
-    private LocalDate Creazione;
-    private String Colore;
-    private Utente Autore;
-    public ToDo(String titolo, String descrizione, LocalDate scadenza, String colore) {
-        this.Titolo = titolo;
-        this.Descrizione = descrizione;
-        this.Scadenza = scadenza;
-        this.Colore = colore;
-        this.Stato = StatoToDo.NON_COMPLETATO;
-        this.Creazione = LocalDate.now();
+    private String titolo;
+    private String url;
+    private String descrizione;
+    private LocalDate scadenza;
+    private transient Image immagine; // transient se pensassimo alla serializzazione, per in-memory non è strettamente necessario
+    private int posizione;
+    private StatoToDo stato;
+    private LocalDate creazione;
+    private String colore;
+    private Utente autore; // Come da UML
+
+    // Per la funzionalità di condivisione, non esplicitata come attributo diretto nell'UML del ToDo
+    // ma implicata dalla relazione "condivisione" e metodi in Utente.
+    private Set<Utente> utentiConAccessoCondiviso = new HashSet<>();
+
+
+    public ToDo(String titolo, String descrizione, Utente autore, LocalDate scadenza, String colore) {
+        this.titolo = Objects.requireNonNull(titolo, "Il titolo non può essere nullo");
+        this.descrizione = Objects.requireNonNull(descrizione, "La descrizione non può essere nulla");
+        this.autore = Objects.requireNonNull(autore, "L'autore non può essere nullo");
+        this.scadenza = scadenza; // Può essere nullo se non specificato
+        this.colore = colore;
+        this.creazione = LocalDate.now();
+        this.stato = StatoToDo.NON_COMPLETATO;
+        this.url = "";
+        this.immagine = null; // Default a null
+        this.posizione = 0; // Default
     }
-    public String getColore() {
-        return Colore;
+
+    // Getters e Setters (omessi per brevità, ma necessari per tutti i campi)
+
+    public String getTitolo() { return titolo; }
+    public void setTitolo(String titolo) { this.titolo = titolo; }
+
+    public String getUrl() { return url; }
+    public void setUrl(String url) { this.url = url; }
+
+    public String getDescrizione() { return descrizione; }
+    public void setDescrizione(String descrizione) { this.descrizione = descrizione; }
+
+    public LocalDate getScadenza() { return scadenza; }
+    public void setScadenza(LocalDate scadenza) { this.scadenza = scadenza; }
+
+    public Image getImmagine() { return immagine; }
+    public void setImmagine(Image immagine) { this.immagine = immagine; }
+
+    public int getPosizione() { return posizione; }
+    public void setPosizione(int posizione) { this.posizione = posizione; }
+
+    public StatoToDo getStato() { return stato; }
+    public void setStato(StatoToDo stato) { this.stato = stato; }
+
+    public LocalDate getCreazione() { return creazione; }
+    public void setCreazione(LocalDate creazione) { this.creazione = creazione; } // Generalmente non si cambia
+
+    public String getColore() { return colore; }
+    public void setColore(String colore) { this.colore = colore; }
+
+    public Utente getAutore() { return autore; }
+    public void setAutore(Utente autore) { this.autore = autore; } // L'autore di solito non cambia dopo la creazione
+
+    public Set<Utente> getUtentiConAccessoCondiviso() {
+        return utentiConAccessoCondiviso;
     }
-    public void setColore(String colore) {
-        this.Colore = colore;
+
+    public void aggiungiUtenteCondiviso(Utente utente) {
+        this.utentiConAccessoCondiviso.add(utente);
     }
-    public StatoToDo getStato() {
-        return Stato;
+
+    public void rimuoviUtenteCondiviso(Utente utente) {
+        this.utentiConAccessoCondiviso.remove(utente);
     }
-    public void setStato(StatoToDo stato) {
-        this.Stato = stato;
+
+    // Per facilitare la visualizzazione negli JComboBox, ad esempio
+    @Override
+    public String toString() {
+        return titolo + (scadenza != null ? " (Scade: " + scadenza.toString() + ")" : "");
     }
-    public LocalDate getScadenza() {
-        return Scadenza;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ToDo toDo = (ToDo) o;
+        // Un ToDo è univoco per titolo, data creazione e autore per semplicità.
+        // O usare un ID univoco se disponibile.
+        return titolo.equals(toDo.titolo) &&
+                creazione.equals(toDo.creazione) &&
+                autore.equals(toDo.autore) &&
+                Objects.equals(url, toDo.url) &&
+                Objects.equals(descrizione, toDo.descrizione);
     }
-    public void setScadenza(LocalDate scadenza) {
-        this.Scadenza = scadenza;
-    }
-    public String getImmagine() {
-        return Immagine;
-    }
-    public void setImmagine(String immagine) {
-        this.Immagine = immagine;
-    }
-    public int getPosizione() {
-        return Posizione;
-    }
-    public void setPosizione(int posizione) {
-        Posizione = posizione;
-    }
-    public LocalDate getCreazione() {
-        return Creazione;
-    }
-    public void setCreazione(LocalDate creazione) {
-        Creazione = creazione;
-    }
-    public String getTitolo() {
-        return Titolo;
-    }
-    public void setTitolo(String titolo) {
-        Titolo = titolo;
-    }
-    public String getUrl() {
-        return Url;
-    }
-    public void setUrl(String url) {
-        Url = url;
-    }
-    public String getDescrizione() {
-        return Descrizione;
-    }
-    public void setDescrizione(String descrizione) {
-        Descrizione = descrizione;
-    }
-    public Utente getAutore() {
-        return Autore;
-    }
-    public void setAutore(Utente autore) {
-        Autore = autore;
-    }
-    public ArrayList<Utente> getUtenti() {
-        return Utenti;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(titolo, creazione, autore, url, descrizione);
     }
 }
