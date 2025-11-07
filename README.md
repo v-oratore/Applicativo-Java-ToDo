@@ -23,8 +23,9 @@ L’applicazione desktop, sviluppata in **Java con Swing**, fornisce una gestion
 
 ## Requisiti
 
-  - Java 14+ - PostgreSQL
-  - Maven
+  - Java 23
+  - PostgreSQL
+  - Maven 23
 
 ## Installazione e Avvio
 
